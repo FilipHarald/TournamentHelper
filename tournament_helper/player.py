@@ -5,6 +5,6 @@ class player(db.Model):
     char_code = db.StringProperty(required=True)
     match_won = db.IntegerProperty()
 
-    
+
 
 
