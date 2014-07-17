@@ -21,6 +21,9 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Hej Gustav!')
 
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
 ], debug=True)
+
