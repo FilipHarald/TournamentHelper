@@ -14,16 +14,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import webapp2
+import jinja2
+import os
+import cgi
+from google.appengine.api import users
 
 
-class MainHandler(webapp2.RequestHandler):
+#initializes templates (jinja)
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
+
+
+class Handler(webapp2.RequestHandler):
+    def write(self, *a, **kw):
+        self.response.out.write(*a, **kw)
+
+    def render_str(self, template, **params):
+        t = jinja_env.get_template(template)
+        return t.render(params)
+
+    def render(self, template, **kw):
+        self.write(self.render_str(template, **kw))
+
+
+def escape_html(s):
+    return cgi.escape(s, quote=True)
+
+
+class MainPage(Handler):
     def get(self):
-        self.response.write('Hej Gustav!')
+        #self.response.headers['Content-Type'] = 'text/html'
+        visits = self.request.cookies.get('visits', '0')
+        if visits.isdigit():
+            visits = int(visits) + 1
+        else:
+            visits = 0
+        user = users.get_current_user()
+        if user:
+            nickname = user.nickname()
+            logout_url = users.create_logout_url('/')
+            self.render("main.html", visits=visits, nickname=nickname, logout_url=logout_url)
+            #greeting = ('Welcome, %s! (<a href="%s">sign out</a>)' %
+            #            (user.nickname(), users.create_logout_url('/')))
+        else:
+            sign_in_url = users.create_login_url('/')
+            self.render("main.html", visits=visits, sign_in_url=sign_in_url)
+            #greeting = ('<a href="%s">Sign in or register</a>.' %
+            #            users.create_login_url('/'))
 
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainPage)
 ], debug=True)
-
+www.apache.org
+www.apache.org

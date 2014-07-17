@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Starcraft Tournament</title>
+    </head>
+    <body>
+        {% if nickname %}
+            Hello {{nickname}} <a href="{{logout_url}}">sign out</a>, you've been here {{visits}} times!
+        {% else %}
+            You're not signed in,
+            <br>
+            try signing in: <a href="{{sign_in_url}}">Sign in or register</a>
+        {% endif %}
+    </body>
+</html>
