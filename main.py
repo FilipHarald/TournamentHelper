@@ -56,26 +56,32 @@ class MainPage(Handler):
             self.render("main.html", sign_in_url=sign_in_url)
 
 
-
 class SignUpPage(Handler):
     def get(self):
         self.render('sign_up.html')
 
     def post(self):
+        user = users.get_current_user()
         error_nick = "You need to enter your Starcraft 2 username"
         error_char_code = "You need to enter your Starcraft 2 character code"
+        error_already_registered = "%s already has a Starcraft nickname connected to it" % user.nickname()
         nick = self.request.get("nick")
         char_code = self.request.get("char_code")
         if nick:
             error_nick = ""
+            q = db.GqlQuery("SELECT * FROM Player WHERE user = :1", user)
+            p = q.get()
+            if not p:
+                error_already_registered = ""
         if char_code:
             error_char_code = ""
-        if error_nick or error_char_code:
+        if error_nick or error_char_code or error_already_registered:
             self.render('sign_up.html',
                         nick=nick,
                         char_code=char_code,
                         error_nick=error_nick,
-                        error_char_code=error_char_code)
+                        error_char_code=error_char_code,
+                        error_already_registered=error_already_registered)
         else:
             player_to_be_added = player.Player(nick=nick, char_code=char_code)
             player_to_be_added.put()
