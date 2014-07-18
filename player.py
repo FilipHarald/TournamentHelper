@@ -5,9 +5,14 @@ class Player(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
     nick = db.StringProperty(required=True)
     char_code = db.StringProperty(required=True)
-    matches_won = db.IntegerProperty(required=True, default=0)
+    matches_won = db.IntegerProperty(default=0)
 
 #returns null if user not found
+
+
+def get_all_players():
+    q = db.GlQuery("SELECT * FROM Player")
+    return q.get()
 
 
 def get_matches_won(user):

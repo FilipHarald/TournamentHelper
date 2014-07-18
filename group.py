@@ -3,8 +3,8 @@ from google.appengine.ext import db
 
 class Group(db.Model):
     name = db.StringProperty(required=True)
-    winner_bracket = db.BooleanProperty(required=True)
-    list_of_players = db.ListProperty(required=True)
+    winner_bracket = db.BooleanProperty(default=False)
+    list_of_players = db.ListProperty(default=[])
 
 
 def add_player(group_name, player_name):
