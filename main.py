@@ -52,24 +52,15 @@ def escape_html(s):
 
 class MainPage(Handler):
     def get(self):
-        #self.response.headers['Content-Type'] = 'text/html'
-        visits = self.request.cookies.get('visits', '0')
-        if visits.isdigit():
-            visits = int(visits) + 1
-        else:
-            visits = 0
         user = users.get_current_user()
         if user:
             nickname = user.nickname()
             logout_url = users.create_logout_url('/')
-            self.render("main.html", visits=visits, nickname=nickname, logout_url=logout_url)
-            #greeting = ('Welcome, %s! (<a href="%s">sign out</a>)' %
-            #            (user.nickname(), users.create_logout_url('/')))
+            self.render("main.html", nickname=nickname, logout_url=logout_url)
         else:
             sign_in_url = users.create_login_url('/')
-            self.render("main.html", visits=visits, sign_in_url=sign_in_url)
-            #greeting = ('<a href="%s">Sign in or register</a>.' %
-            #            users.create_login_url('/'))
+            self.render("main.html", sign_in_url=sign_in_url)
+
 
 
 class SignUpPage(Handler):
@@ -99,7 +90,13 @@ class SignUpPage(Handler):
 
 class AdminPage(Handler):
     def get(self):
-        self.render('admin_login.html')
+        user = users.get_current_user()
+        nickname = user.nickname()
+        if nickname:
+            if nickname == 'Filip.Harald' or nickname == 'limstift_@hotmail.com':
+                self.render('admin.html')
+            else:
+                self.redirect('/')
 
 
 class ListOfPLayersPage(Handler):
