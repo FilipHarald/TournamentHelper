@@ -20,6 +20,7 @@ import jinja2
 import os
 import cgi
 from google.appengine.api import users
+from google.appengine.ext import db
 
 
 #initializes templates (jinja)
@@ -64,6 +65,39 @@ class MainPage(Handler):
             #greeting = ('<a href="%s">Sign in or register</a>.' %
             #            users.create_login_url('/'))
 
+
+class player(db.Model):
+    nick = db.StringProperty(required=True)
+    char_code = db.StringProperty(required=True)
+    match_won = db.IntegerProperty()
+
+
+class RegistrationPage(Handler):
+    def get(self):
+        self.render('main.html')
+
+    def post(self):
+        error_nick = "You need to enter your Starcraft 2 username"
+        error_char_code = "You need to enter your Starcraft 2 character code"
+        nick = self.request.get("nick")
+        char_code = self.request.get("char_code")
+        if nick:
+            error_nick =""
+        if char_code:
+            error_char_code = ""
+
+        if error_nick or error_char_code :
+            self.render('main.html',
+                        nick=nick,
+                        char_code=char_code,
+                        error_nick=error_nick,
+                        error_char_code=error_char_code)
+
+        else:
+            blog_user = BlogUser(username=username, hash_n_salt=(hasher.make_salt()), email=email)
+            blog_user.put()
+            self.response.headers.add_header('Set-Cookie', 'username=ssHar')
+            return webapp2.redirect('/blog/welcome')
 
 
 app = webapp2.WSGIApplication([
