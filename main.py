@@ -28,6 +28,12 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 
+class Player(db.Model):
+    nick = db.StringProperty(required=True)
+    char_code = db.StringProperty(required=True)
+    match_won = db.IntegerProperty()
+
+
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -66,12 +72,6 @@ class MainPage(Handler):
             #            users.create_login_url('/'))
 
 
-class player(db.Model):
-    nick = db.StringProperty(required=True)
-    char_code = db.StringProperty(required=True)
-    match_won = db.IntegerProperty()
-
-
 class RegistrationPage(Handler):
     def get(self):
         self.render('main.html')
@@ -82,17 +82,15 @@ class RegistrationPage(Handler):
         nick = self.request.get("nick")
         char_code = self.request.get("char_code")
         if nick:
-            error_nick =""
+            error_nick = ""
         if char_code:
             error_char_code = ""
-
-        if error_nick or error_char_code :
+        if error_nick or error_char_code:
             self.render('main.html',
                         nick=nick,
                         char_code=char_code,
                         error_nick=error_nick,
                         error_char_code=error_char_code)
-
         else:
             blog_user = BlogUser(username=username, hash_n_salt=(hasher.make_salt()), email=email)
             blog_user.put()
@@ -103,5 +101,3 @@ class RegistrationPage(Handler):
 app = webapp2.WSGIApplication([
     ('/', MainPage)
 ], debug=True)
-www.apache.org
-www.apache.org
