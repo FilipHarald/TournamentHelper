@@ -74,7 +74,7 @@ class MainPage(Handler):
 
 class SignUpPage(Handler):
     def get(self):
-        self.render('signup.html')
+        self.render('sign_up.html')
 
     def post(self):
         error_nick = "You need to enter your Starcraft 2 username"
@@ -86,7 +86,7 @@ class SignUpPage(Handler):
         if char_code:
             error_char_code = ""
         if error_nick or error_char_code:
-            self.render('main.html',
+            self.render('sign_up.html',
                         nick=nick,
                         char_code=char_code,
                         error_nick=error_nick,
@@ -94,24 +94,23 @@ class SignUpPage(Handler):
         else:
             player = Player(nick=nick, char_code=char_code)
             player.put()
-            return webapp2.redirect('list_of_players.html')
+            self.redirect('/playerhub')
+
 
 class AdminPage(Handler):
     def get(self):
         self.render('admin_login.html')
 
 
-
 class ListOfPLayersPage(Handler):
     def get(self):
-        self.render('list_of_players.html')
+        players = db.GqlQuery('select * from Player')
+        self.render('list_of_players.html', players=players)
 
 
 class ProjectorViewPage(Handler):
     def get(self):
         self.render('projector_view.html')
-
-
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
