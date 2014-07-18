@@ -21,17 +21,11 @@ import os
 import cgi
 from google.appengine.api import users
 from google.appengine.ext import db
-
+import player
 
 #initializes templates (jinja)
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
-
-
-class Player(db.Model):
-    nick = db.StringProperty(required=True)
-    char_code = db.StringProperty(required=True)
-    match_won = db.IntegerProperty()
 
 
 class Handler(webapp2.RequestHandler):
@@ -83,8 +77,8 @@ class SignUpPage(Handler):
                         error_nick=error_nick,
                         error_char_code=error_char_code)
         else:
-            player = Player(nick=nick, char_code=char_code)
-            player.put()
+            player_to_be_added = player.Player(nick=nick, char_code=char_code)
+            player_to_be_added.put()
             self.redirect('/playerhub')
 
 
@@ -93,7 +87,7 @@ class AdminPage(Handler):
         user = users.get_current_user()
         nickname = user.nickname()
         if nickname:
-            if nickname == 'Filip.Harald' or nickname == 'limstift_@hotmail.com':
+            if nickname == 'Filip.Harald' or nickname == 'limstift_@hotmail.com' or nickname == 'eskil.petersson':
                 self.render('admin.html')
             else:
                 self.redirect('/')
