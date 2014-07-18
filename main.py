@@ -72,9 +72,9 @@ class MainPage(Handler):
             #            users.create_login_url('/'))
 
 
-class RegistrationPage(Handler):
+class SignUpPage(Handler):
     def get(self):
-        self.render('main.html')
+        self.render('signup.html')
 
     def post(self):
         error_nick = "You need to enter your Starcraft 2 username"
@@ -92,12 +92,31 @@ class RegistrationPage(Handler):
                         error_nick=error_nick,
                         error_char_code=error_char_code)
         else:
-            blog_user = BlogUser(username=username, hash_n_salt=(hasher.make_salt()), email=email)
-            blog_user.put()
-            self.response.headers.add_header('Set-Cookie', 'username=ssHar')
-            return webapp2.redirect('/blog/welcome')
+            player = Player(nick=nick, char_code=char_code)
+            player.put()
+            return webapp2.redirect('list_of_players.html')
+
+class AdminPage(Handler):
+    def get(self):
+        self.render('admin_login.html')
 
 
-app = webapp2.WSGIApplication([
-    ('/', MainPage)
-], debug=True)
+
+class ListOfPLayersPage(Handler):
+    def get(self):
+        self.render('list_of_players.html')
+
+
+class ProjectorViewPage(Handler):
+    def get(self):
+        self.render('projector_view.html')
+
+
+
+
+app = webapp2.WSGIApplication([('/', MainPage),
+                               ('/signup', SignUpPage),
+                               ('/admin', AdminPage),
+                               ('/playerhub', ListOfPLayersPage),
+                               ('/admin/projectorview', ProjectorViewPage)],
+                              debug=True)
