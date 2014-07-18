@@ -6,11 +6,21 @@
     </head>
     <body>
         {% if nickname %}
-            Hello {{nickname}} <a href="{{logout_url}}">sign out</a>, you've been here {{visits}} times!
-        {% else %}
-            You're not signed in,
+            <b>Hello {{nickname}}!</b> (<a href="{{logout_url}}">sign out</a>)
             <br>
-            try signing in: <a href="{{sign_in_url}}">Sign in or register</a>
+            Welcome to Helsingkronas Starcraft 2 tournament page.
+            <br>
+            <a href="sc2-hb.appspot.com/signup">Follow this link to register</a>, and please make sure you have your payment confirmation key ready.
+            <br>
+            <br>
+            <br>
+            If you haven't got a payment confirmation key, try contacting us:
+            <br> Filip.harald@gmail.com
+            <br> limstift_@hotmail.com
+        {% else %}
+            Please sign in with your Google account:
+            <br>
+            <a href="{{sign_in_url}}">Sign in or register</a>
         {% endif %}
     </body>
 </html>
