@@ -22,6 +22,7 @@ import cgi
 from google.appengine.api import users
 from google.appengine.ext import db
 import player
+import tournament_factory
 
 #initializes templates (jinja)
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
@@ -110,9 +111,17 @@ class ProjectorViewPage(Handler):
         self.render('projector_view.html')
 
 
+class TestPage(Handler):
+    def get(self):
+        tournament_factory.set_up_tournament_table()
+        players = db.GqlQuery('select * from Player')
+        self.render('list_of_players.html', players=players)
+
+
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/signup', SignUpPage),
                                ('/admin', AdminPage),
                                ('/playerhub', ListOfPLayersPage),
-                               ('/admin/projectorview', ProjectorViewPage)],
+                               ('/admin/projectorview', ProjectorViewPage),
+                               ('/test', TestPage)],
                               debug=True)
