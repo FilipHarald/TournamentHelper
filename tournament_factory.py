@@ -3,6 +3,7 @@ import tree
 import player
 import group
 
+
 def create_groups():
     players = player.get_all_players()
     groups = []
@@ -21,7 +22,7 @@ def create_groups():
 
 def set_up_tournament_table():
     #test ---
-    g = group.Group(name='first')
+    g = group.Group()
     win = 0
     for k in (0, 16):
         p = player.Player(nick=k, char_code=k, matches_won=win)
@@ -32,7 +33,7 @@ def set_up_tournament_table():
         g.add_test_player(p)
         if not win == 0 and (win % 4 == 0):
             g.put
-            g = group.Group(name=k)
+            g = group.Group()
     #test ---
     tournament_table = tree.TournamentBrackets()
     winner_bracket = []

@@ -2,19 +2,13 @@ from google.appengine.ext import db
 import player
 
 
-class Player(db.Model):
-    user = db.UserProperty(auto_current_user_add=True)
-    nick = db.StringProperty(required=True)
-    char_code = db.StringProperty(required=True)
-    matches_won = db.IntegerProperty(default=0)
-
-
 class Group(db.Model):
-    name = db.StringProperty()
-    list_of_players = db.ListProperty(default=[])
+    i = db.IntegerProperty(default=0)
+    #list_of_players = db.ListProperty(default=[])
 
     def add_test_player(self, test):
-        self.list_of_players.__add__(test)
+        self.i = test
+     #   self.list_of_players.__add__(test)
 
 
 def add_player(group_name, player_name):
