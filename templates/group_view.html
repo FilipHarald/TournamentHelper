@@ -31,9 +31,9 @@
         <th>Character code</th>
         <th>Matches won</th>
     </tr>
-    {% for group in Group %}
-    {% for * in group %}
-    <tr>
+    {% for * in list_of_players %}
+    {% if group_nbr == 1 %}
+     <tr>
 
         <td>{{nick}}</td>
         <td>{{char_code}}</td>
@@ -52,8 +52,8 @@
         <th>Character code</th>
         <th>Matches won</th>
     </tr>
-    {% for group in Group %}
-    {% for * in group %}
+    {% for * in list_of_players %}
+    {% if group_nbr == 2 %}
     <tr>
 
         <td>{{nick}}</td>
@@ -72,8 +72,8 @@
         <th>Character code</th>
         <th>Matches won</th>
     </tr>
-    {% for group in Group %}
-    {% for * in group %}
+    {% for * in list_of_players %}
+    {% if group_nbr == 3 %}
     <tr>
 
         <td>{{nick}}</td>
@@ -92,8 +92,8 @@
         <th>Character code</th>
         <th>Matches won</th>
     </tr>
-    {% for group in Group %}
-    {% for * in group %}
+    {% for * in list_of_players %}
+    {% if group_nbr == 4 %}
     <tr>
 
         <td>{{nick}}</td>
