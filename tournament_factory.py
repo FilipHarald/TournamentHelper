@@ -20,8 +20,8 @@ def create_groups():
         g.put()
 
 
-def set_up_tournament_table():
-    #test ---
+def run_test():
+        #test ---
     win = 0
     counter = 1
     for k in range(0, 16):
@@ -32,15 +32,13 @@ def set_up_tournament_table():
             win = 0
             counter += 1
     #test ---
-    group_stage_groups = []
-    group_one = []
-    group_two = []
-    group_three = []
-    group_four = []
-    group_stage_groups.extend([group_one, group_two, group_three, group_four])
+
+
+def set_up_tournament_table():
+    group_stage_groups = [[], [], [], []]
     q = db.GqlQuery("SELECT * FROM Player ORDER BY group_nbr ASC , matches_won DESC")
-    THE_list = q.run()
-    for p in THE_list:
+    the_list = q.run()
+    for p in the_list:
         group_stage_groups[p.group_nbr-1].append(p.key())
     winner_bracket = []
     loser_bracket = []
@@ -60,13 +58,13 @@ def set_up_tournament_table():
         i += 1
     i = 0
     for g in group_stage_groups:
-        loser_bracket[13-i].add_player_key(g[0])
+        loser_bracket[13-i].add_player_key(g[2])
         if i < 2:
-            loser_bracket[13-i-2].add_player_key(g[1])
+            loser_bracket[13-i-2].add_player_key(g[3])
         elif i == 2:
-            loser_bracket[13].add_player_key(g[1])
+            loser_bracket[13].add_player_key(g[3])
         else:
-            loser_bracket[13-2].add_player_key(g[1])
+            loser_bracket[13-2].add_player_key(g[3])
         i += 1
     winner_bracket_keys = []
     loser_bracket_keys = []

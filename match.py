@@ -5,8 +5,8 @@ import player
 class Match(db.Model):
     list_of_players = db.ListProperty(db.Key)
 
-    def add_player_key(self, player_name):
-        self.list_of_players.append(player_name)
+    def add_player_key(self, player_key):
+        self.list_of_players.append(player_key)
 
 
 def get_list_of_players(name):
