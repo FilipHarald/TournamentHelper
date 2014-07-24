@@ -113,8 +113,16 @@ class ProjectorViewPage(Handler):
 
 class GroupViewPage(Handler):
     def get(self):
-        list_of_players = db.GqlQuery('select * from Player')
+        list_of_players = db.GqlQuery("SELECT * FROM Player ORDER BY group_nbr ASC , matches_won DESC")
         self.render('group_view.html', list_of_players=list_of_players)
+
+    def post(self):
+        nick = self.request.get("nick")
+        q = db.GqlQuery("Select * FROM Player WHERE nick= '%s'" % nick)
+        p = q.get()
+        p.add_match_won()
+        p.put()
+        self.redirect('/admin/groupview')
 
 
 class TestPage1(Handler):

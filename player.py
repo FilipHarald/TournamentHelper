@@ -11,6 +11,9 @@ class Player(db.Model):
     def set_group_nbr(self, nbr):
         self.group_nbr = nbr
 
+    def add_match_won(self):
+        self.matches_won += 1
+
     def get_user(self, nbr):
         self.group_nbr = nbr
 
