@@ -57,7 +57,7 @@ def set_up_tournament_table():
         elif i == 2:
             winner_bracket[6].add_player_key(g[1])
         else:
-            winner_bracket[6-2].add_player_key(g[1])
+            winner_bracket[6-1].add_player_key(g[1])
         i += 1
     i = 0
     for g in group_stage_groups:
