@@ -67,7 +67,7 @@ def set_up_tournament_table():
         elif i == 2:
             loser_bracket[13].add_player_key(g[3])
         else:
-            loser_bracket[13-2].add_player_key(g[3])
+            loser_bracket[13-1].add_player_key(g[3])
         i += 1
     winner_bracket_keys = []
     loser_bracket_keys = []
