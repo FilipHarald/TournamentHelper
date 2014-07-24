@@ -1,7 +1,7 @@
 from google.appengine.ext import db
-import group
+import match
 
 
 class TournamentBrackets(db.Model):
-    winner_bracket = db.ListProperty(int, default=None)
-    loser_bracket = db.ListProperty(int, default=None)
+    winner_bracket = db.ListProperty(db.Key)
+    loser_bracket = db.ListProperty(db.Key)
