@@ -11,6 +11,19 @@ class Player(db.Model):
     def set_group_nbr(self, nbr):
         self.group_nbr = nbr
 
+    def get_user(self, nbr):
+        self.group_nbr = nbr
+
+    def get_nick(self, nbr):
+        self.group_nbr = nbr
+
+    def get_char(self, nbr):
+        self.group_nbr = nbr
+
+    def get_group_nbr(self, nbr):
+        self.group_nbr = nbr
+
+
 
 def get_all_players():
     q = db.GqlQuery("SELECT * FROM Player")

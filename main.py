@@ -111,6 +111,12 @@ class ProjectorViewPage(Handler):
         self.render('projector_view.html')
 
 
+class GroupViewPage(Handler):
+    def get(self):
+        list_of_players = db.GqlQuery('select * from Player')
+        self.render('group_view.html', list_of_players=list_of_players)
+
+
 class TestPage1(Handler):
     def get(self):
         tournament_factory.run_test1()
@@ -128,6 +134,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/admin', AdminPage),
                                ('/playerhub', ListOfPLayersPage),
                                ('/admin/projectorview', ProjectorViewPage),
+                               ('/admin/groupview', GroupViewPage),
                                ('/test1', TestPage1),
                                ('/test2', TestPage2)],
                               debug=True)

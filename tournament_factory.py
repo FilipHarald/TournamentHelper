@@ -11,7 +11,7 @@ def set_groups():
         p.set_group_nbr(x)
         x += 1
         p.put()
-        if x == 4:
+        if x == 5:
             x = 1
 
 
