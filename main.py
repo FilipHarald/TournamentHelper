@@ -113,12 +113,12 @@ class ProjectorViewPage(Handler):
 
 class TestPage1(Handler):
     def get(self):
-        tournament_factory.run_test()
+        tournament_factory.run_test1()
 
 
 class TestPage2(Handler):
     def get(self):
-        tournament_factory.set_up_tournament_table()
+        tournament_factory.set_groups()
         players = db.GqlQuery('select * from Player')
         self.render('list_of_players.html', players=players)
 

@@ -4,24 +4,27 @@ import player
 import match
 
 
-def create_groups():
+def set_groups():
     players = player.get_all_players()
-    groups = []
-    for x in range(1, 4):
-        groups.append(match.Match(name='Group %s' % x))
-    x = 0
+    x = 1
     for p in players:
-        groups[x].add(p)
-        if not 3:
-            x += 1
-        else:
-            x = 0
-    for g in groups:
-        g.put()
+        p.set_group_nbr(x)
+        x += 1
+        p.put()
+        if x == 4:
+            x = 1
 
 
-def run_test():
-        #test ---
+def run_test1():
+    #test ---
+    for k in range(0, 16):
+        p = player.Player(nick=str(k), char_code=str(k))
+        p.put()
+    #test ---
+
+
+def run_test2():
+    #test ---
     win = 0
     counter = 1
     for k in range(0, 16):

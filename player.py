@@ -8,10 +8,13 @@ class Player(db.Model):
     group_nbr = db.IntegerProperty(default=0)
     matches_won = db.IntegerProperty(default=0)
 
+    def set_group_nbr(self, nbr):
+        self.group_nbr = nbr
+
 
 def get_all_players():
     q = db.GqlQuery("SELECT * FROM Player")
-    return q.get()
+    return q.run()
 
 
 def get_matches_won(user):
