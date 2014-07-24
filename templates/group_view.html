@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table,th,td
+        {
+        border:1px solid black;
+        border-collapse:collapse;
+        margin: 20px;
+        }
+        th,td
+        {
+        padding:5px;
+        }
+        table
+        {
+        float:left
+        }
+    </style>
+</head>
+<body>
+
+
+<table style="width:300px">
+    <tr>
+        <th>Group 1</th>
+    </tr>
+    <tr>
+
+        <th>Username</th>
+        <th>Character code</th>
+        <th>Matches won</th>
+    </tr>
+    {% for group in Group %}
+    {% for * in group %}
+    <tr>
+
+        <td>{{nick}}</td>
+        <td>{{char_code}}</td>
+        <td>{{matches_won}}</td>
+    </tr>
+
+</table>
+
+
+<table style="width:300px">
+    <tr>
+        <th>Group 2</th>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <th>Character code</th>
+        <th>Matches won</th>
+    </tr>
+    {% for group in Group %}
+    {% for * in group %}
+    <tr>
+
+        <td>{{nick}}</td>
+        <td>{{char_code}}</td>
+        <td>{{matches_won}}</td>
+    </tr>
+</table>
+
+
+<table style="width:300px">
+    <tr>
+        <th>Group 3</th>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <th>Character code</th>
+        <th>Matches won</th>
+    </tr>
+    {% for group in Group %}
+    {% for * in group %}
+    <tr>
+
+        <td>{{nick}}</td>
+        <td>{{char_code}}</td>
+        <td>{{matches_won}}</td>
+    </tr>
+</table>
+
+
+<table style="width:300px">
+    <tr>
+        <th>Group 4</th>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <th>Character code</th>
+        <th>Matches won</th>
+    </tr>
+    {% for group in Group %}
+    {% for * in group %}
+    <tr>
+
+        <td>{{nick}}</td>
+        <td>{{char_code}}</td>
+        <td>{{matches_won}}</td>
+    </tr>
+</table>
+
+</body>
+</html>
