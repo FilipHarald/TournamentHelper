@@ -20,7 +20,6 @@
 </head>
 <body>
 
-
 <table style="width:300px">
     <tr>
         <th>Group 1</th>
@@ -32,14 +31,15 @@
         <th>Matches won</th>
     </tr>
     {% for p in list_of_players %}
-    {% if group_nbr == 1 %}
-     <tr>
+        {% if p.group_nbr == 1 %}
+             <tr>
 
-        <td>{{p.nick}}</td>
-        <td>{{p.char_code}}</td>
-        <td>{{p.matches_won}}</td>
-    </tr>
-
+                <td>{{p.nick}}</td>
+                <td>{{p.char_code}}</td>
+                <td>{{p.matches_won}}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
 </table>
 
 
@@ -53,13 +53,15 @@
         <th>Matches won</th>
     </tr>
     {% for p in list_of_players %}
-    {% if group_nbr == 2 %}
-     <tr>
+        {% if p.group_nbr == 2 %}
+             <tr>
 
-        <td>{{p.nick}}</td>
-        <td>{{p.char_code}}</td>
-        <td>{{p.matches_won}}</td>
-    </tr>
+                <td>{{p.nick}}</td>
+                <td>{{p.char_code}}</td>
+                <td>{{p.matches_won}}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
 </table>
 
 
@@ -73,13 +75,15 @@
         <th>Matches won</th>
     </tr>
     {% for p in list_of_players %}
-    {% if group_nbr == 3 %}
-     <tr>
+        {% if p.group_nbr == 3 %}
+             <tr>
 
-        <td>{{p.nick}}</td>
-        <td>{{p.char_code}}</td>
-        <td>{{p.matches_won}}</td>
-    </tr>
+                <td>{{p.nick}}</td>
+                <td>{{p.char_code}}</td>
+                <td>{{p.matches_won}}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
 </table>
 
 
@@ -93,14 +97,22 @@
         <th>Matches won</th>
     </tr>
     {% for p in list_of_players %}
-    {% if group_nbr == 4 %}
-     <tr>
+        {% if p.group_nbr == 4 %}
+             <tr>
 
-        <td>{{p.nick}}</td>
-        <td>{{p.char_code}}</td>
-        <td>{{p.matches_won}}</td>
-    </tr>
+                <td>{{p.nick}}</td>
+                <td>{{p.char_code}}</td>
+                <td>{{p.matches_won}}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+
 </table>
-
+    <br>
+    <br>
+    <form name="input" method="post">
+         <b>Nick:</b> <input type="text" name="nick">
+    <input type="submit" value="Add match won">
+    </form>
 </body>
 </html>
