@@ -1,7 +1,6 @@
 from google.appengine.ext import db
 import tree
 import player
-import match
 
 
 def set_groups():
@@ -43,27 +42,27 @@ def set_up_tournament_table():
     the_list = q.run()
     for p in the_list:
         group_stage_groups[p.group_nbr-1].append(p.key())
-    winner_bracket_keys = [None]*14
-    loser_bracket_keys = [None]*28
+    winner_bracket_keys = [None]*15
+    loser_bracket_keys = [None]*29
     i = 0
     for g in group_stage_groups:
-        winner_bracket_keys[13-i] = g[0].key()
+        winner_bracket_keys[15-i] = g[0].key()
         if i < 4:
-            winner_bracket_keys[13-i-5] = g[1].key()
+            winner_bracket_keys[15-i-5] = g[1].key()
         elif i == 4:
-            winner_bracket_keys[12] = g[1].key()
+            winner_bracket_keys[14] = g[1].key()
         else:
-            winner_bracket_keys[10] = g[1].key()
+            winner_bracket_keys[12] = g[1].key()
         i += 2
     i = 0
     for g in group_stage_groups:
-        loser_bracket_keys[27-i] = g[2].key()
+        loser_bracket_keys[29-i] = g[2].key()
         if i < 2:
-            loser_bracket_keys[27-i-5] = g[3].key()
+            loser_bracket_keys[29-i-5] = g[3].key()
         elif i == 2:
-            loser_bracket_keys[26] = g[3].key()
+            loser_bracket_keys[28] = g[3].key()
         else:
-            loser_bracket_keys[24] = g[3].key()
+            loser_bracket_keys[26] = g[3].key()
         i += 2
     tournament_table = tree.TournamentBrackets()
     tournament_table.winner_bracket = winner_bracket_keys
