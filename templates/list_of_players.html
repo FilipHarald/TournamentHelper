@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title>Player hub</title>
-    </head>
-    <body>
-        <b>Starcraft nickname || character code</b>
-        <br>
-        {% for player in players %}
-        <br>
-        {{player.nick}} || {{player.char_code}}
-        {% endfor %}
-        <br>
-        <br>
-    <a href="/">Main page</a>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Player hub</title>
+    <style>
+        table,th,td
+        {
+        border:1px solid black;
+        border-collapse:collapse;
+        margin: 20px;
+        }
+        th,td
+        {
+        padding:5px;
+        }
 
-    </body>
+    </style>
+</head>
+<body>
+<table style="width:300px">
+    <tr>
+        <th>Players registered</th>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <th>Character code</th>
+    </tr>
+    {% for p in players %}
+    <tr>
+
+        <td>{{p.nick}}</td>
+        <td>{{p.char_code}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="/">Main page</a>
+
+</body>
 </html>
