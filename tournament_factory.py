@@ -43,40 +43,28 @@ def set_up_tournament_table():
     the_list = q.run()
     for p in the_list:
         group_stage_groups[p.group_nbr-1].append(p.key())
-    winner_bracket = []
-    loser_bracket = []
-    while len(winner_bracket) < 7:
-        winner_bracket.append(match.Match())
-    while len(loser_bracket) < 14:
-        loser_bracket.append(match.Match())
+    winner_bracket_keys = [None]*14
+    loser_bracket_keys = [None]*28
     i = 0
     for g in group_stage_groups:
-        winner_bracket[6-i].add_player_key(g[0])
-        if i < 2:
-            winner_bracket[6-i-2].add_player_key(g[1])
-        elif i == 2:
-            winner_bracket[6].add_player_key(g[1])
+        winner_bracket_keys[13-i] = g[0].key()
+        if i < 4:
+            winner_bracket_keys[13-i-5] = g[1].key()
+        elif i == 4:
+            winner_bracket_keys[12] = g[1].key()
         else:
-            winner_bracket[6-1].add_player_key(g[1])
-        i += 1
+            winner_bracket_keys[10] = g[1].key()
+        i += 2
     i = 0
     for g in group_stage_groups:
-        loser_bracket[13-i].add_player_key(g[2])
+        loser_bracket_keys[27-i] = g[2].key()
         if i < 2:
-            loser_bracket[13-i-2].add_player_key(g[3])
+            loser_bracket_keys[27-i-5] = g[3].key()
         elif i == 2:
-            loser_bracket[13].add_player_key(g[3])
+            loser_bracket_keys[26] = g[3].key()
         else:
-            loser_bracket[13-1].add_player_key(g[3])
-        i += 1
-    winner_bracket_keys = []
-    loser_bracket_keys = []
-    for p in winner_bracket:
-        p.put()
-        winner_bracket_keys.append(p.key())
-    for p in loser_bracket:
-        p.put()
-        loser_bracket_keys.append(p.key())
+            loser_bracket_keys[24] = g[3].key()
+        i += 2
     tournament_table = tree.TournamentBrackets()
     tournament_table.winner_bracket = winner_bracket_keys
     tournament_table.loser_bracket = loser_bracket_keys

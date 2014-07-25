@@ -1,5 +1,4 @@
 from google.appengine.ext import db
-import match
 
 
 class TournamentBrackets(db.Model):
