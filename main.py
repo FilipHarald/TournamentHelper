@@ -108,7 +108,42 @@ class ListOfPLayersPage(Handler):
 
 class ProjectorViewPage(Handler):
     def get(self):
-        self.render('projector_view.html')
+        q = db.GqlQuery("Select * FROM TournamentBrackets")
+        t_b = q.get()
+        winner_bracket_keys = t_b.winner_bracket
+        winner_bracket_players = []
+        for k in winner_bracket_keys:
+            if k:
+                winner_bracket_players.append(db.get(k))
+            else:
+                winner_bracket_players.append(k)
+        loser_bracket_keys = t_b.loser_bracket
+        loser_bracket_players = []
+        for k in loser_bracket_keys:
+            if k:
+                loser_bracket_players.append(db.get(k))
+            else:
+                loser_bracket_players.append(k)
+        self.render('projector_view.html', winner_bracket=winner_bracket_players, loser_bracket=loser_bracket_players)
+
+    def post(self):
+        nick_n_char_code = self.request.get("nick_n_char_code")
+        nick, char_code = nick_n_char_code.split('.')
+        q = db.GqlQuery("Select * FROM TournamentBrackets")
+        t_b = q.get()
+        winner_bracket_keys = t_b.winner_bracket
+        count = 0
+        for p in winner_bracket_keys:
+            if not p:
+                player = db.get(p)
+                if nick is player.nick:
+                    if char_code is player.char_code:
+                        t_b.winner_bracket[count-2/2] = player.key()
+                        break
+            count += 1
+        t_b.put()
+
+        self.redirect('/admin/groupview')
 
 
 class GroupViewPage(Handler):
@@ -117,8 +152,9 @@ class GroupViewPage(Handler):
         self.render('group_view.html', list_of_players=list_of_players)
 
     def post(self):
-        nick = self.request.get("nick")
-        q = db.GqlQuery("Select * FROM Player WHERE nick= '%s'" % nick)
+        nick_n_char_code = self.request.get("nick_n_char_code")
+        nick, char_code = nick_n_char_code.split('.')
+        q = db.GqlQuery("Select * FROM Player WHERE nick= '%s' AND char_code='%s'" % (nick, char_code))
         p = q.get()
         p.add_match_won()
         p.put()
