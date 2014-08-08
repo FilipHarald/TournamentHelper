@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 import tree
 import player
+import pay_code
 
 
 def set_groups():
@@ -16,6 +17,8 @@ def set_groups():
 
 def run_test1():
     #test ---
+    pay = pay_code.Paycode(pay_code="a")
+    pay.put()
     for k in range(0, 16):
         p = player.Player(nick=str(k), char_code=str(k))
         p.put()

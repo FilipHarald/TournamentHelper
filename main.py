@@ -66,8 +66,11 @@ class SignUpPage(Handler):
         error_nick = "You need to enter your Starcraft 2 username"
         error_char_code = "You need to enter your Starcraft 2 character code"
         error_already_registered = "%s already has a Starcraft nickname connected to it" % user.nickname()
+        error_wrong_pay_code = "Your code was not valid"
+        error_pay_code = "You need to enter your pay code"
         nick = self.request.get("nick")
         char_code = self.request.get("char_code")
+        pay_code = self.request.get("pay_code")
         if nick:
             error_nick = ""
             q = db.GqlQuery("SELECT * FROM Player WHERE user = :1", user)
@@ -76,13 +79,23 @@ class SignUpPage(Handler):
                 error_already_registered = ""
         if char_code:
             error_char_code = ""
-        if error_nick or error_char_code or error_already_registered:
+        if pay_code:
+            error_pay_code = ""
+            q = db.GqlQuery("Select * FROM Paycode WHERE pay_code = '%s'" % pay_code)
+            temp = q.get()
+            if temp:
+                error_wrong_pay_code = ""
+        else:
+            error_wrong_pay_code = ""
+        if error_nick or error_char_code or error_already_registered or error_pay_code or error_wrong_pay_code:
             self.render('sign_up.html',
                         nick=nick,
                         char_code=char_code,
                         error_nick=error_nick,
                         error_char_code=error_char_code,
-                        error_already_registered=error_already_registered)
+                        error_already_registered=error_already_registered,
+                        error_pay_code=error_pay_code,
+                        error_wrong_pay_code=error_wrong_pay_code)
         else:
             player_to_be_added = player.Player(nick=nick, char_code=char_code)
             player_to_be_added.put()
@@ -92,12 +105,16 @@ class SignUpPage(Handler):
 class AdminPage(Handler):
     def get(self):
         user = users.get_current_user()
-        nickname = user.nickname()
-        if nickname:
-            if nickname == 'Filip.Harald' or nickname == 'limstift_@hotmail.com' or nickname == 'eskil.petersson':
-                self.render('admin.html')
-            else:
-                self.redirect('/')
+        if user:
+            nickname = user.nickname()
+            if nickname:
+                if nickname == 'Filip.Harald' or nickname == 'limstift_@hotmail.com' or nickname == 'eskil.petersson':
+                    self.render('admin.html')
+                else:
+                    self.redirect('/')
+        else:
+                    self.redirect('/')
+
 
 
 class ListOfPLayersPage(Handler):
@@ -110,21 +127,22 @@ class ProjectorViewPage(Handler):
     def get(self):
         q = db.GqlQuery("Select * FROM TournamentBrackets")
         t_b = q.get()
-        winner_bracket_keys = t_b.winner_bracket
-        winner_bracket_players = []
-        for k in winner_bracket_keys:
-            if k:
-                winner_bracket_players.append(db.get(k))
-            else:
-                winner_bracket_players.append(k)
-        loser_bracket_keys = t_b.loser_bracket
-        loser_bracket_players = []
-        for k in loser_bracket_keys:
-            if k:
-                loser_bracket_players.append(db.get(k))
-            else:
-                loser_bracket_players.append(k)
-        self.render('projector_view.html', winner_bracket=winner_bracket_players, loser_bracket=loser_bracket_players)
+        if t_b:
+            winner_bracket_keys = t_b.winner_bracket
+            winner_bracket_players = []
+            for k in winner_bracket_keys:
+                if k:
+                    winner_bracket_players.append(db.get(k))
+                else:
+                    winner_bracket_players.append(k)
+            loser_bracket_keys = t_b.loser_bracket
+            loser_bracket_players = []
+            for k in loser_bracket_keys:
+                if k:
+                    loser_bracket_players.append(db.get(k))
+                else:
+                    loser_bracket_players.append(k)
+            self.render('projector_view.html', winner_bracket=winner_bracket_players, loser_bracket=loser_bracket_players)
 
     def post(self):
         nick_n_char_code = self.request.get("nick_n_char_code")
@@ -132,18 +150,30 @@ class ProjectorViewPage(Handler):
         q = db.GqlQuery("Select * FROM TournamentBrackets")
         t_b = q.get()
         winner_bracket_keys = t_b.winner_bracket
+        loser_bracket_keys = t_b.loser_bracket
         count = 0
+        fixed = False
         for p in winner_bracket_keys:
-            if not p:
+            if p:
                 player = db.get(p)
                 if nick is player.nick:
                     if char_code is player.char_code:
                         t_b.winner_bracket[count-2/2] = player.key()
+                        fixed = True
                         break
             count += 1
+        if not fixed:
+            count = 0
+            for p in loser_bracket_keys:
+                if p:
+                    player = db.get(p)
+                    if nick is player.nick:
+                        if char_code is player.char_code:
+                            t_b.loser_bracket[count-2/2] = player.key()
+                            break
+                count += 1
         t_b.put()
-
-        self.redirect('/admin/groupview')
+        self.redirect('/admin/projectorview')
 
 
 class GroupViewPage(Handler):
@@ -151,13 +181,15 @@ class GroupViewPage(Handler):
         list_of_players = db.GqlQuery("SELECT * FROM Player ORDER BY group_nbr ASC , matches_won DESC")
         self.render('group_view.html', list_of_players=list_of_players)
 
+
     def post(self):
         nick_n_char_code = self.request.get("nick_n_char_code")
-        nick, char_code = nick_n_char_code.split('.')
-        q = db.GqlQuery("Select * FROM Player WHERE nick= '%s' AND char_code='%s'" % (nick, char_code))
-        p = q.get()
-        p.add_match_won()
-        p.put()
+        if nick_n_char_code:
+            nick, char_code = nick_n_char_code.split('.')
+            q = db.GqlQuery("Select * FROM Player WHERE nick= '%s' AND char_code='%s'" % (nick, char_code))
+            p = q.get()
+            p.add_match_won()
+            p.put()
         self.redirect('/admin/groupview')
 
 
