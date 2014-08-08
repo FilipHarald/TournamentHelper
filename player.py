@@ -27,7 +27,6 @@ class Player(db.Model):
         self.group_nbr = nbr
 
 
-
 def get_all_players():
     q = db.GqlQuery("SELECT * FROM Player")
     return q.run()
