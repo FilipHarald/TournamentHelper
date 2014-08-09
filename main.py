@@ -84,6 +84,7 @@ class SignUpPage(Handler):
             q = db.GqlQuery("Select * FROM Paycode WHERE pay_code = '%s'" % pay_code)
             temp = q.get()
             if temp:
+                db.delete(temp.key())
                 error_wrong_pay_code = ""
         else:
             error_wrong_pay_code = ""
@@ -144,35 +145,37 @@ class ProjectorViewPage(Handler):
                     loser_bracket_players.append(k)
             self.render('projector_view.html', winner_bracket=winner_bracket_players, loser_bracket=loser_bracket_players)
 
+
     def post(self):
         nick_n_char_code = self.request.get("nick_n_char_code")
-        nick, char_code = nick_n_char_code.split('.')
         q = db.GqlQuery("Select * FROM TournamentBrackets")
         t_b = q.get()
-        winner_bracket_keys = t_b.winner_bracket
-        loser_bracket_keys = t_b.loser_bracket
-        count = 0
-        fixed = False
-        for p in winner_bracket_keys:
-            if p:
-                player = db.get(p)
-                if nick is player.nick:
-                    if char_code is player.char_code:
-                        t_b.winner_bracket[count-2/2] = player.key()
-                        fixed = True
-                        break
-            count += 1
-        if not fixed:
+        if nick_n_char_code and t_b:
+            nick, char_code = nick_n_char_code.split('.')
+            winner_bracket_keys = t_b.winner_bracket
+            loser_bracket_keys = t_b.loser_bracket
             count = 0
-            for p in loser_bracket_keys:
+            fixed = False
+            for p in winner_bracket_keys:
                 if p:
                     player = db.get(p)
                     if nick is player.nick:
                         if char_code is player.char_code:
-                            t_b.loser_bracket[count-2/2] = player.key()
+                            t_b.winner_bracket[count-1/2] = player.key()
+                            fixed = True
                             break
                 count += 1
-        t_b.put()
+            if not fixed:
+                count = 0
+                for p in loser_bracket_keys:
+                    if p:
+                        player = db.get(p)
+                        if nick is player.nick:
+                            if char_code is player.char_code:
+                                t_b.loser_bracket[count-1/2] = player.key()
+                                break
+                    count += 1
+            t_b.put()
         self.redirect('/admin/projectorview')
 
 
